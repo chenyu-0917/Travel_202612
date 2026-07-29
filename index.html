@@ -33,58 +33,10 @@
 
   .display{font-family:"Shippori Mincho","Noto Serif TC",serif;}
 
-  /* ---------- Ticket strip ---------- */
-  .ticket{
-    max-width:920px;
-    margin:28px auto 0;
-    padding:16px 22px;
-    background:var(--ash);
-    color:var(--cream);
-    border-radius:6px;
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px 24px;
-    font-size:13px;
-    letter-spacing:.04em;
-  }
-  .ticket b{color:var(--gold); font-weight:600;}
-  .ticket .seg{display:flex; gap:8px; align-items:baseline;}
-  .ticket .lbl{opacity:.55; font-size:11px;}
-
-  /* ---------- Hero ---------- */
-  header.hero{
-    max-width:920px;
-    margin:0 auto;
-    padding:64px 22px 40px;
-    text-align:left;
-  }
-  .eyebrow{
-    font-size:13px;
-    letter-spacing:.28em;
-    color:var(--soil);
-    text-transform:uppercase;
-    margin-bottom:18px;
-  }
-  h1.title{
-    font-size:clamp(40px,7vw,68px);
-    margin:0 0 14px;
-    font-weight:800;
-    line-height:1.15;
-    letter-spacing:.02em;
-  }
-  .subtitle{
-    font-size:17px;
-    color:#565349;
-    max-width:44ch;
-    margin:0;
-  }
-
   /* ---------- Map section ---------- */
   .map-wrap{
     max-width:920px;
-    margin:8px auto 0;
+    margin:28px auto 0;
     padding:0 22px;
   }
   .map-caption{
@@ -95,7 +47,13 @@
     gap:10px;
     margin-bottom:12px;
   }
-  .map-caption .profile-caption{margin-bottom:0;}
+  .profile-caption{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#847F70;
+    margin-bottom:0;
+  }
   .day-filters{display:flex; gap:8px; flex-wrap:wrap;}
   .day-filters button{
     font-family:"Noto Sans TC",sans-serif;
@@ -147,31 +105,6 @@
     box-shadow:0 1px 3px rgba(0,0,0,.35);
   }
 
-  /* ---------- Elevation profile divider ---------- */
-  .profile-wrap{
-    max-width:920px;
-    margin:36px auto 0;
-    padding:0 22px;
-  }
-  .profile-caption{
-    font-size:12px;
-    letter-spacing:.14em;
-    text-transform:uppercase;
-    color:#847F70;
-    margin-bottom:6px;
-  }
-  svg.profile{width:100%; height:auto; display:block;}
-  .peak-label{
-    font-family:"Shippori Mincho","Noto Serif TC",serif;
-    font-size:14px;
-    fill:var(--ash);
-  }
-  .day-tag{
-    font-size:12px;
-    fill:#847F70;
-    letter-spacing:.06em;
-  }
-
   /* ---------- Day sections ---------- */
   main{max-width:920px; margin:0 auto; padding:20px 22px 100px;}
   section.day{
@@ -179,6 +112,7 @@
     padding-top:38px;
     border-top:1px solid var(--line);
   }
+  section.day:first-child{margin-top:48px;}
   .day-head{
     display:flex;
     align-items:baseline;
@@ -266,6 +200,25 @@
   .tag.open{background:rgba(94,107,69,.15); color:var(--grass);}
   .tag.warn{background:rgba(206,154,61,.2); color:#8A651F;}
 
+  .nav-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top:10px;
+    padding:5px 12px;
+    font-size:12px;
+    font-family:"Noto Sans TC",sans-serif;
+    letter-spacing:.02em;
+    color:var(--soil);
+    border:1px solid rgba(166,81,47,.35);
+    border-radius:20px;
+    text-decoration:none;
+    background:rgba(166,81,47,.06);
+    transition:background .15s ease, color .15s ease;
+  }
+  .nav-btn:hover{background:var(--soil); color:#fff;}
+  .nav-btn svg{width:11px; height:11px; flex-shrink:0;}
+
   .callout{
     background:var(--card);
     border-left:3px solid var(--soil);
@@ -292,7 +245,6 @@
   }
 
   @media (max-width:600px){
-    .ticket{font-size:11.5px; padding:14px 16px;}
     .callout{margin-left:0;}
     .stop{grid-template-columns:56px 1fr;}
     .day-date{margin-left:0;}
@@ -325,6 +277,7 @@
         <div class="rail"><span class="time">08:50</span><span class="dot"></span></div>
         <div class="stop-body">
           <p class="stop-name">熊本機場抵達</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.8349978,130.85897789999999&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
       <div class="stop">
@@ -332,6 +285,7 @@
         <div class="stop-body">
           <p class="stop-name">熊本市動植物園 <span class="tag open">週三開放</span></p>
           <p class="stop-note">9:00–17:00 營業，部分展區整修至 2027 春天。</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.7745613,130.7476687&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
       <div class="stop">
@@ -339,6 +293,7 @@
         <div class="stop-body">
           <p class="stop-name">住 OMO5 熊本</p>
           <p class="stop-note">距離動植物園車程約 15 分鐘，鄰近上通・下通商店街與熊本城，晚餐、散步都方便。</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.8027929,130.7100672&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
     </section>
@@ -363,6 +318,7 @@
         <div class="stop-body">
           <p class="stop-name">草千里ヶ浜</p>
           <p class="stop-note">高原漫步、近距離看馬，風大記得帶外套。</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.8818249,131.0533279&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
       <div class="stop">
@@ -370,6 +326,7 @@
         <div class="stop-body">
           <p class="stop-name">Kusasenri Coffee Roastery <span class="tag open">全週營業</span></p>
           <p class="stop-note">就在草千里旁，10:00–17:00 營業，午餐配自家烘焙咖啡。</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.8860479,131.0543251&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
       <div class="stop">
@@ -384,6 +341,7 @@
         <div class="stop-body">
           <p class="stop-name">Ricca 甜點 <span class="tag warn">週四有營業</span></p>
           <p class="stop-note">10:00–18:00　Mont Blanc 常提早售罄，建議一到就先點。</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.9969223,130.72231689999998&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
 
@@ -410,6 +368,7 @@
         <div class="stop-body">
           <p class="stop-name">ゆめタウン光の森</p>
           <p class="stop-note">9:30–21:30 營業，熊本北部最大百貨之一，機場前最後補貨點。</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.8607642,130.7843399&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
       <div class="stop">
@@ -417,6 +376,7 @@
         <div class="stop-body">
           <p class="stop-name">熊本機場</p>
           <p class="stop-note">車程約 20 分鐘，國際線建議起飛前 2 小時抵達。</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.8349978,130.85897789999999&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
       <div class="stop">
@@ -427,6 +387,11 @@
       </div>
     </section>
   </main>
+
+  <footer>
+    <span>熊本三日遊・12.16 – 12.18</span>
+    <span>中華航空 KMJ ⇄ RMQ</span>
+  </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -444,14 +409,14 @@
       color: "#5E6B45",
       label: "Day 2・阿蘇 → 山鹿",
       stops: [
-        { name: "草千里ヶ浜", time: "10:30", note: "高原漫步", lat: 32.8818249, lng: 131.0533279 },
+        { name: "草千里ヶ浜", time: "11:30", note: "高原漫步", lat: 32.8818249, lng: 131.0533279 },
         { name: "Kusasenri Coffee Roastery", time: "12:00", note: "午餐・咖啡", lat: 32.8860479, lng: 131.0543251 },
-        { name: "Ricca", time: "15:30", note: "甜點・週四營業", lat: 32.9969223, lng: 130.72231689999998 }
+        { name: "Ricca", time: "16:30", note: "甜點・週四營業", lat: 32.9969223, lng: 130.72231689999998 }
       ]
     },
     3: {
       color: "#7E93A0",
-      label: "Day 3・菊陽町 → 賦歸",
+      label: "Day 3・菊陽町 → 回台灣",
       stops: [
         { name: "ゆめタウン光の森", time: "11:00", note: "9:30–21:30 營業", lat: 32.8607642, lng: 130.7843399 },
         { name: "熊本機場", time: "16:00", note: "18:35 起飛", lat: 32.8349978, lng: 130.85897789999999 }
@@ -483,7 +448,10 @@
 
     d.stops.forEach(s => {
       L.marker([s.lat, s.lng], { icon: makeIcon(d.color) })
-        .bindPopup(`<b>${s.name}</b><br>${s.time}｜${s.note}`)
+        .bindPopup(
+          `<b>${s.name}</b><br>${s.time}｜${s.note}` +
+          `<br><a href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}&travelmode=driving" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;font-size:12px;color:${d.color};text-decoration:none;border:1px solid ${d.color}55;border-radius:20px;padding:4px 10px;">🧭 導航</a>`
+        )
         .addTo(group);
     });
 
