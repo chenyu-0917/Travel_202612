@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;800&family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<style>
+  :root{
+    --ash:#2B2A28;
+    --grass:#5E6B45;
+    --soil:#A6512F;
+    --cream:#F3EEE3;
+    --sky:#7E93A0;
+    --gold:#CE9A3D;
+    --line:rgba(43,42,40,0.14);
+    --card:#FBF8F1;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--cream);
+    color:var(--ash);
+    font-family:"Noto Sans TC", sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+  }
+
+  .display{font-family:"Shippori Mincho","Noto Serif TC",serif;}
+
+  /* ---------- Ticket strip ---------- */
+  .ticket{
+    max-width:920px;
+    margin:28px auto 0;
+    padding:16px 22px;
+    background:var(--ash);
+    color:var(--cream);
+    border-radius:6px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px 24px;
+    font-size:13px;
+    letter-spacing:.04em;
+  }
+  .ticket b{color:var(--gold); font-weight:600;}
+  .ticket .seg{display:flex; gap:8px; align-items:baseline;}
+  .ticket .lbl{opacity:.55; font-size:11px;}
+
+  /* ---------- Hero ---------- */
+  header.hero{
+    max-width:920px;
+    margin:0 auto;
+    padding:64px 22px 40px;
+    text-align:left;
+  }
+  .eyebrow{
+    font-size:13px;
+    letter-spacing:.28em;
+    color:var(--soil);
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  h1.title{
+    font-size:clamp(40px,7vw,68px);
+    margin:0 0 14px;
+    font-weight:800;
+    line-height:1.15;
+    letter-spacing:.02em;
+  }
+  .subtitle{
+    font-size:17px;
+    color:#565349;
+    max-width:44ch;
+    margin:0;
+  }
+
+  /* ---------- Map section ---------- */
+  .map-wrap{
+    max-width:920px;
+    margin:8px auto 0;
+    padding:0 22px;
+  }
+  .map-caption{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .map-caption .profile-caption{margin-bottom:0;}
+  .day-filters{display:flex; gap:8px; flex-wrap:wrap;}
+  .day-filters button{
+    font-family:"Noto Sans TC",sans-serif;
+    font-size:12.5px;
+    letter-spacing:.03em;
+    padding:6px 14px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:#5B5749;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .day-filters button .sw{
+    display:inline-block;
+    width:8px;height:8px;
+    border-radius:50%;
+    margin-right:6px;
+  }
+  .day-filters button.active{
+    color:#fff;
+    border-color:transparent;
+  }
+  .day-filters button[data-day="1"].active{background:var(--soil);}
+  .day-filters button[data-day="2"].active{background:var(--grass);}
+  .day-filters button[data-day="3"].active{background:var(--sky);}
+  .day-filters button[data-day="all"].active{background:var(--ash);}
+
+  #map{
+    width:100%;
+    height:480px;
+    border-radius:8px;
+    border:1px solid var(--line);
+    box-shadow:0 1px 3px rgba(43,42,40,.06);
+  }
+  .leaflet-popup-content-wrapper{
+    border-radius:6px;
+    font-family:"Noto Sans TC",sans-serif;
+  }
+  .leaflet-popup-content b{
+    font-family:"Shippori Mincho","Noto Serif TC",serif;
+    font-size:14px;
+  }
+  .pin{
+    width:16px;height:16px;
+    border-radius:50% 50% 50% 0;
+    transform:rotate(-45deg);
+    border:2px solid #fff;
+    box-shadow:0 1px 3px rgba(0,0,0,.35);
+  }
+
+  /* ---------- Elevation profile divider ---------- */
+  .profile-wrap{
+    max-width:920px;
+    margin:36px auto 0;
+    padding:0 22px;
+  }
+  .profile-caption{
+    font-size:12px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:#847F70;
+    margin-bottom:6px;
+  }
+  svg.profile{width:100%; height:auto; display:block;}
+  .peak-label{
+    font-family:"Shippori Mincho","Noto Serif TC",serif;
+    font-size:14px;
+    fill:var(--ash);
+  }
+  .day-tag{
+    font-size:12px;
+    fill:#847F70;
+    letter-spacing:.06em;
+  }
+
+  /* ---------- Day sections ---------- */
+  main{max-width:920px; margin:0 auto; padding:20px 22px 100px;}
+  section.day{
+    margin-top:88px;
+    padding-top:38px;
+    border-top:1px solid var(--line);
+  }
+  .day-head{
+    display:flex;
+    align-items:baseline;
+    gap:16px;
+    margin-bottom:6px;
+    flex-wrap:wrap;
+  }
+  .day-num{
+    font-family:"Shippori Mincho","Noto Serif TC",serif;
+    font-size:15px;
+    color:var(--soil);
+    letter-spacing:.1em;
+  }
+  .day-title{
+    font-family:"Shippori Mincho","Noto Serif TC",serif;
+    font-size:30px;
+    font-weight:600;
+    margin:0;
+  }
+  .day-date{
+    font-size:13px;
+    color:#847F70;
+    margin-left:auto;
+  }
+  .day-theme{
+    color:#565349;
+    font-size:15px;
+    margin:6px 0 30px;
+  }
+
+  .stop{
+    display:grid;
+    grid-template-columns:76px 1fr;
+    gap:0 20px;
+    position:relative;
+  }
+  .stop + .stop{margin-top:0;}
+  .stop .rail{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .stop .rail::before{
+    content:"";
+    width:1px;
+    flex:1;
+    background:var(--line);
+  }
+  .stop:last-child .rail::before{background:transparent;}
+  .stop .dot{
+    width:9px;height:9px;border-radius:50%;
+    background:var(--soil);
+    margin-top:6px;
+    flex-shrink:0;
+  }
+  .stop .time{
+    font-family:"Shippori Mincho","Noto Serif TC",serif;
+    font-size:13px;
+    color:var(--ash);
+    padding-top:0;
+    white-space:nowrap;
+  }
+  .stop-body{padding-bottom:34px;}
+  .stop-name{
+    font-size:18px;
+    font-weight:600;
+    margin:0 0 6px;
+  }
+  .stop-note{
+    font-size:14px;
+    color:#5B5749;
+    margin:0;
+  }
+  .tag{
+    display:inline-block;
+    font-size:11px;
+    letter-spacing:.05em;
+    padding:2px 9px;
+    border-radius:20px;
+    margin-left:8px;
+    position:relative;
+    top:-1px;
+  }
+  .tag.open{background:rgba(94,107,69,.15); color:var(--grass);}
+  .tag.warn{background:rgba(206,154,61,.2); color:#8A651F;}
+
+  .callout{
+    background:var(--card);
+    border-left:3px solid var(--soil);
+    padding:14px 18px;
+    border-radius:2px;
+    font-size:13.5px;
+    color:#5B5749;
+    margin:26px 0 0 96px;
+  }
+  .callout b{color:var(--ash);}
+
+  /* ---------- Footer ---------- */
+  footer{
+    max-width:920px;
+    margin:0 auto;
+    padding:40px 22px 70px;
+    border-top:1px solid var(--line);
+    font-size:13px;
+    color:#847F70;
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  @media (max-width:600px){
+    .ticket{font-size:11.5px; padding:14px 16px;}
+    .callout{margin-left:0;}
+    .stop{grid-template-columns:56px 1fr;}
+    .day-date{margin-left:0;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="ticket">
+    <div class="seg"><span class="lbl">ROUTE</span> KMJ ⇄ RMQ</div>
+    <div class="seg"><span class="lbl">CARRIER</span> <b>中華航空</b></div>
+    <div class="seg"><span class="lbl">出發</span> 12.16　05:50–08:50</div>
+    <div class="seg"><span class="lbl">回程</span> 12.18　18:35–20:10</div>
+  </div>
+
+  <div class="map-wrap">
+    <div class="map-caption">
+      <div class="profile-caption">Route Map — 三日路線地圖</div>
+      <div class="day-filters">
+        <button data-day="all" class="active">全部</button>
+        <button data-day="1"><span class="sw" style="background:#A6512F"></span>Day 1 熊本市區</button>
+        <button data-day="2"><span class="sw" style="background:#5E6B45"></span>Day 2 阿蘇・山鹿</button>
+        <button data-day="3"><span class="sw" style="background:#7E93A0"></span>Day 3 菊陽町</button>
+      </div>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <main>
+    <!-- DAY 1 -->
+    <section class="day">
+      <div class="day-head">
+        <span class="day-num display">DAY 01</span>
+        <h2 class="day-title">熊本市區</h2>
+        <span class="day-date">12 月 16 日・週三</span>
+      </div>
+      <p class="day-theme">落地、動植物園、入住 OMO5，晚上上通下通隨意走走。</p>
+
+      <div class="stop">
+        <div class="rail"><span class="time">08:50</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">熊本機場抵達</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">13:00</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">熊本市動植物園 <span class="tag open">週三開放</span></p>
+          <p class="stop-note">9:00–17:00 營業，部分展區整修至 2027 春天。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">16:30</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">住 OMO5 熊本</p>
+          <p class="stop-note">距離動植物園車程約 15 分鐘，鄰近上通・下通商店街與熊本城，晚餐、散步都方便。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DAY 2 -->
+    <section class="day">
+      <div class="day-head">
+        <span class="day-num display">DAY 02</span>
+        <h2 class="day-title">阿蘇 → 山鹿</h2>
+        <span class="day-date">12 月 17 日・週四</span>
+      </div>
+      <p class="day-theme">這天車程最長，早點出發，天黑前抵達山鹿。</p>
+
+      <div class="stop">
+        <div class="rail"><span class="time">09:30</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">OMO5 出發 → 阿蘇</p>
+          <p class="stop-note">山路車程約 70–80 分鐘。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">11:30</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">草千里ヶ浜</p>
+          <p class="stop-note">高原漫步、近距離看馬，風大記得帶外套。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">12:00</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">Kusasenri Coffee Roastery <span class="tag open">全週營業</span></p>
+          <p class="stop-note">就在草千里旁，10:00–17:00 營業，午餐配自家烘焙咖啡。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">14:30</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">阿蘇 → 山鹿</p>
+          <p class="stop-note">車程約 90–100 分鐘，路途較遠，中途可安排休息。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">16:30</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">Ricca 甜點 <span class="tag warn">週四有營業</span></p>
+          <p class="stop-note">10:00–18:00　Mont Blanc 常提早售罄，建議一到就先點。</p>
+        </div>
+      </div>
+
+      <div class="callout"><b>提醒：</b>12 月山區日落約在 17:00 前，這個時間安排能在天黑前抵達山鹿，不用摸黑開山路。</div>
+    </section>
+
+    <!-- DAY 3 -->
+    <section class="day">
+      <div class="day-head">
+        <span class="day-num display">DAY 03</span>
+        <h2 class="day-title">菊陽町 → 回台灣</h2>
+        <span class="day-date">12 月 18 日・週五</span>
+      </div>
+      <p class="day-theme">睡飽出發，逛完百貨直接搭機。</p>
+
+      <div class="stop">
+        <div class="rail"><span class="time">上午</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">山鹿出發 → 菊陽町</p>
+          <p class="stop-note">車程約 35–40 分鐘，不用太早起。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">11:00</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">ゆめタウン光の森</p>
+          <p class="stop-note">9:30–21:30 營業，熊本北部最大百貨之一，機場前最後補貨點。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">16:00</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">熊本機場</p>
+          <p class="stop-note">車程約 20 分鐘，國際線建議起飛前 2 小時抵達。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">18:35</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">起飛，回台灣 ✈️</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  const DAYS = {
+    1: {
+      color: "#A6512F",
+      label: "Day 1・熊本市區",
+      stops: [
+        { name: "熊本機場", time: "08:50", note: "抵達", lat: 32.8349978, lng: 130.85897789999999 },
+        { name: "熊本市動植物園", time: "13:00", note: "9:00–17:00 營業", lat: 32.7745613, lng: 130.7476687 },
+        { name: "OMO5 熊本", time: "16:30", note: "入住", lat: 32.8027929, lng: 130.7100672 }
+      ]
+    },
+    2: {
+      color: "#5E6B45",
+      label: "Day 2・阿蘇 → 山鹿",
+      stops: [
+        { name: "草千里ヶ浜", time: "10:30", note: "高原漫步", lat: 32.8818249, lng: 131.0533279 },
+        { name: "Kusasenri Coffee Roastery", time: "12:00", note: "午餐・咖啡", lat: 32.8860479, lng: 131.0543251 },
+        { name: "Ricca", time: "15:30", note: "甜點・週四營業", lat: 32.9969223, lng: 130.72231689999998 }
+      ]
+    },
+    3: {
+      color: "#7E93A0",
+      label: "Day 3・菊陽町 → 賦歸",
+      stops: [
+        { name: "ゆめタウン光の森", time: "11:00", note: "9:30–21:30 營業", lat: 32.8607642, lng: 130.7843399 },
+        { name: "熊本機場", time: "16:00", note: "18:35 起飛", lat: 32.8349978, lng: 130.85897789999999 }
+      ]
+    }
+  };
+
+  const map = L.map('map', { scrollWheelZoom: false }).setView([32.855, 130.85], 10);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  function makeIcon(color){
+    return L.divIcon({
+      className: '',
+      html: `<div class="pin" style="background:${color}"></div>`,
+      iconSize: [16,16],
+      iconAnchor: [8,14]
+    });
+  }
+
+  const layers = {};
+  Object.entries(DAYS).forEach(([day, d]) => {
+    const group = L.layerGroup();
+    const latlngs = d.stops.map(s => [s.lat, s.lng]);
+
+    L.polyline(latlngs, { color: d.color, weight: 3, opacity: 0.75, dashArray: '2 8' }).addTo(group);
+
+    d.stops.forEach(s => {
+      L.marker([s.lat, s.lng], { icon: makeIcon(d.color) })
+        .bindPopup(`<b>${s.name}</b><br>${s.time}｜${s.note}`)
+        .addTo(group);
+    });
+
+    group.addTo(map);
+    layers[day] = group;
+  });
+
+  const buttons = document.querySelectorAll('.day-filters button');
+  buttons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      buttons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const day = btn.dataset.day;
+
+      Object.entries(layers).forEach(([key, group]) => {
+        if (day === 'all' || day === key) {
+          if (!map.hasLayer(group)) group.addTo(map);
+        } else {
+          if (map.hasLayer(group)) map.removeLayer(group);
+        }
+      });
+
+      if (day === 'all') {
+        const all = Object.values(DAYS).flatMap(d => d.stops.map(s => [s.lat, s.lng]));
+        map.fitBounds(all, { padding: [30,30] });
+      } else {
+        const pts = DAYS[day].stops.map(s => [s.lat, s.lng]);
+        map.fitBounds(pts, { padding: [50,50] });
+      }
+    });
+  });
+
+  const allPts = Object.values(DAYS).flatMap(d => d.stops.map(s => [s.lat, s.lng]));
+  map.fitBounds(allPts, { padding: [30,30] });
+</script>
+</body>
+</html>
