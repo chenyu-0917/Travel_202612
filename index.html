@@ -156,13 +156,13 @@
     flex-direction:column;
     align-items:center;
   }
-  .stop .rail::before{
+  .stop .rail::after{
     content:"";
     width:1px;
     flex:1;
     background:var(--line);
   }
-  .stop:last-child .rail::before{background:transparent;}
+  .stop:last-child .rail::after{background:transparent;}
   .stop .dot{
     width:9px;height:9px;border-radius:50%;
     background:var(--soil);
@@ -375,7 +375,7 @@
         <div class="rail"><span class="time">16:00</span><span class="dot"></span></div>
         <div class="stop-body">
           <p class="stop-name">熊本機場</p>
-          <p class="stop-note">車程約 20 分鐘，國際線建議起飛前 2 小時抵達。</p>
+          <p class="stop-note">車程約 20 分鐘，國際線建議起飛前 3 小時抵達。<span class="tag open">免稅退稅</span></p>
           <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.8349978,130.85897789999999&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
