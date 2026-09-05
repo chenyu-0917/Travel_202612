@@ -257,9 +257,9 @@
       <div class="profile-caption">Route Map — 三日路線地圖</div>
       <div class="day-filters">
         <button data-day="all" class="active">全部</button>
-        <button data-day="1"><span class="sw" style="background:#A6512F"></span>Day 1 </button>
-        <button data-day="2"><span class="sw" style="background:#5E6B45"></span>Day 2 </button>
-        <button data-day="3"><span class="sw" style="background:#7E93A0"></span>Day 3 </button>
+        <button data-day="1"><span class="sw" style="background:#A6512F"></span>Day 1 熊本市區</button>
+        <button data-day="2"><span class="sw" style="background:#5E6B45"></span>Day 2 阿蘇・山鹿</button>
+        <button data-day="3"><span class="sw" style="background:#7E93A0"></span>Day 3 菊陽町</button>
       </div>
     </div>
     <div id="map"></div>
@@ -330,10 +330,18 @@
         </div>
       </div>
       <div class="stop">
-        <div class="rail"><span class="time">14:30</span><span class="dot"></span></div>
+        <div class="rail"><span class="time">14:00</span><span class="dot"></span></div>
         <div class="stop-body">
           <p class="stop-name">阿蘇 → 山鹿</p>
           <p class="stop-note">車程約 90–100 分鐘，路途較遠，中途可安排休息。</p>
+        </div>
+      </div>
+      <div class="stop">
+        <div class="rail"><span class="time">15:30</span><span class="dot"></span></div>
+        <div class="stop-body">
+          <p class="stop-name">八千代座周邊散策 <span class="tag open">全年無休</span></p>
+          <p class="stop-note">1910 年建成的明治時期戲院，保留木造結構與傳統座席，9:00–18:00 開放，周邊老街也適合走走。</p>
+          <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=33.0168645,130.6892981&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
       <div class="stop">
@@ -345,7 +353,7 @@
         </div>
       </div>
 
-      <div class="callout"><b>提醒：</b>12 月山區日落約在 17:00 前，這個時間安排能在天黑前抵達山鹿，不用摸黑開山路。</div>
+      <p class="callout"><b>提醒：</b>12 月山區日落約在 17:00 前，這個時間安排能在天黑前抵達山鹿，不用摸黑開山路。</p>
     </section>
 
     <!-- DAY 3 -->
@@ -375,7 +383,7 @@
         <div class="rail"><span class="time">16:00</span><span class="dot"></span></div>
         <div class="stop-body">
           <p class="stop-name">熊本機場</p>
-          <p class="stop-note">車程約 20 分鐘，國際線建議起飛前 3 小時抵達。<span class="tag open">免稅退稅</span></p>
+          <p class="stop-note">車程約 20 分鐘，國際線建議起飛前 2 小時抵達。</p>
           <a class="nav-btn" href="https://www.google.com/maps/dir/?api=1&destination=32.8349978,130.85897789999999&travelmode=driving" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/></svg>導航</a>
         </div>
       </div>
@@ -390,7 +398,7 @@
 
   <footer>
     <span>熊本三日遊・12.16 – 12.18</span>
-    <span>中華航空 TPE ⇄ KMJ</span>
+    <span>中華航空 KMJ ⇄ RMQ</span>
   </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -411,6 +419,7 @@
       stops: [
         { name: "草千里ヶ浜", time: "11:30", note: "高原漫步", lat: 32.8818249, lng: 131.0533279 },
         { name: "Kusasenri Coffee Roastery", time: "12:00", note: "午餐・咖啡", lat: 32.8860479, lng: 131.0543251 },
+        { name: "八千代座", time: "15:30", note: "老戲院・9:00–18:00", lat: 33.0168645, lng: 130.6892981 },
         { name: "Ricca", time: "16:30", note: "甜點・週四營業", lat: 32.9969223, lng: 130.72231689999998 }
       ]
     },
