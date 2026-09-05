@@ -77,10 +77,11 @@
     color:#fff;
     border-color:transparent;
   }
-  .day-filters button[data-day="1"].active{background:var(--soil);}
-  .day-filters button[data-day="2"].active{background:var(--grass);}
-  .day-filters button[data-day="3"].active{background:var(--sky);}
-  .day-filters button[data-day="all"].active{background:var(--ash);}
+  .day-filters button[data-view="1"].active{background:var(--soil);}
+  .day-filters button[data-view="2"].active{background:var(--grass);}
+  .day-filters button[data-view="3"].active{background:var(--sky);}
+  .day-filters button[data-view="all"].active{background:var(--ash);}
+  .day-filters button[data-view="checklist"].active{background:var(--gold);}
 
   #map{
     width:100%;
@@ -103,6 +104,81 @@
     transform:rotate(-45deg);
     border:2px solid #fff;
     box-shadow:0 1px 3px rgba(0,0,0,.35);
+  }
+
+  /* ---------- Checklist ---------- */
+  .checklist-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-top:20px;
+  }
+  .checklist-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:22px 22px 8px;
+  }
+  .checklist-card h3{
+    font-family:"Shippori Mincho","Noto Serif TC",serif;
+    font-size:17px;
+    font-weight:600;
+    margin:0 0 4px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .checklist-card .sub{
+    font-size:12.5px;
+    color:#847F70;
+    margin:0 0 16px;
+  }
+  .check-item{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    padding:10px 0;
+    border-top:1px solid var(--line);
+    cursor:pointer;
+  }
+  .checklist-card .check-item:first-of-type{border-top:none;}
+  .check-item input{
+    appearance:none;
+    -webkit-appearance:none;
+    width:17px;height:17px;
+    flex-shrink:0;
+    margin-top:2px;
+    border:1.5px solid #B9B2A0;
+    border-radius:4px;
+    background:#fff;
+    cursor:pointer;
+    position:relative;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .check-item input:checked{
+    background:var(--grass);
+    border-color:var(--grass);
+  }
+  .check-item input:checked::after{
+    content:"";
+    position:absolute;
+    left:5px; top:1px;
+    width:4px; height:8px;
+    border:solid #fff;
+    border-width:0 2px 2px 0;
+    transform:rotate(45deg);
+  }
+  .check-item span{
+    font-size:14.5px;
+    color:#3F3D38;
+    line-height:1.5;
+  }
+  .check-item input:checked ~ span{
+    color:#A39C8C;
+    text-decoration:line-through;
+  }
+  @media (max-width:600px){
+    .checklist-grid{grid-template-columns:1fr;}
   }
 
   /* ---------- Day sections ---------- */
@@ -253,15 +329,37 @@
 <body>
   <div class="map-wrap">
     <div class="map-caption">
-      <div class="profile-caption">Route Map — 三日路線地圖</div>
+      <div class="profile-caption">Route &amp; Prep — 路線與準備</div>
       <div class="day-filters">
-        <button data-day="all" class="active">全部</button>
-        <button data-day="1"><span class="sw" style="background:#A6512F"></span>Day 1 </button>
-        <button data-day="2"><span class="sw" style="background:#5E6B45"></span>Day 2 </button>
-        <button data-day="3"><span class="sw" style="background:#7E93A0"></span>Day 3 </button>
+        <button data-view="all" class="active">全部</button>
+        <button data-view="1"><span class="sw" style="background:#A6512F"></span>Day 1 </button>
+        <button data-view="2"><span class="sw" style="background:#5E6B45"></span>Day 2 </button>
+        <button data-view="3"><span class="sw" style="background:#7E93A0"></span>Day 3 </button>
+        <button data-view="checklist"><span class="sw" style="background:#CE9A3D"></span>📋 打包清單</button>
       </div>
     </div>
     <div id="map"></div>
+
+    <div class="checklist-grid" id="checklist-panel" style="display:none;">
+      <div class="checklist-card">
+        <h4> 事先要申請／準備</h4>
+        <p class="sub">出發前處理，有些需要提前預約</p>
+        <label class="check-item"><input type="checkbox"><span>OMO5 熊本 訂房確認</span></label>
+        <label class="check-item"><input type="checkbox"><span>網路 SIM／eSIM</span></label>
+        <label class="check-item"><input type="checkbox"><span>海外旅遊平安險</span></label>
+        <label class="check-item"><input type="checkbox"><span>Visit Japan Web 入境資料登記</span></label>
+      </div>
+      <div class="checklist-card">
+        <h4> 隨身物品</h4>
+        <p class="sub">確認清單</p>
+        <label class="check-item"><input type="checkbox"><span>護照</span></label>
+        <label class="check-item"><input type="checkbox"><span>日幣現金｜信用卡</span></label>
+        <label class="check-item"><input type="checkbox"><span>保暖外套｜圍巾</span></label>
+        <label class="check-item"><input type="checkbox"><span>行動電源、充電線、轉接頭</span></label>
+        <label class="check-item"><input type="checkbox"><span>常備藥品｜保養品（護手霜、護唇膏）</span></label>
+        <label class="check-item"><input type="checkbox"><span>兩套衣物｜睡衣｜襪子｜水壺</span></label>
+      </div>
+    </div>
   </div>
   <main>
     <!-- DAY 1 -->
@@ -431,7 +529,6 @@
         { name: "Kusasenri Coffee Roastery", time: "12:00", note: "午餐・咖啡", lat: 32.8860479, lng: 131.0543251 },
         { name: "Ricca", time: "15:30", note: "甜點", lat: 32.9969223, lng: 130.72231689999998 },
         { name: "八千代座", time: "16:30", note: "9:00–18:00", lat: 33.0168645, lng: 130.6892981 }
-        
       ]
     },
     3: {
@@ -479,26 +576,39 @@
     layers[day] = group;
   });
 
+  const mapEl = document.getElementById('map');
+  const checklistEl = document.getElementById('checklist-panel');
   const buttons = document.querySelectorAll('.day-filters button');
+
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       buttons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const day = btn.dataset.day;
+      const view = btn.dataset.view;
+
+      if (view === 'checklist') {
+        mapEl.style.display = 'none';
+        checklistEl.style.display = 'grid';
+        return;
+      }
+
+      checklistEl.style.display = 'none';
+      mapEl.style.display = 'block';
+      map.invalidateSize();
 
       Object.entries(layers).forEach(([key, group]) => {
-        if (day === 'all' || day === key) {
+        if (view === 'all' || view === key) {
           if (!map.hasLayer(group)) group.addTo(map);
         } else {
           if (map.hasLayer(group)) map.removeLayer(group);
         }
       });
 
-      if (day === 'all') {
+      if (view === 'all') {
         const all = Object.values(DAYS).flatMap(d => d.stops.map(s => [s.lat, s.lng]));
         map.fitBounds(all, { padding: [30,30] });
       } else {
-        const pts = DAYS[day].stops.map(s => [s.lat, s.lng]);
+        const pts = DAYS[view].stops.map(s => [s.lat, s.lng]);
         map.fitBounds(pts, { padding: [50,50] });
       }
     });
